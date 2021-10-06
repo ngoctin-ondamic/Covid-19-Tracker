@@ -1,7 +1,7 @@
 import { Card, CardContent, Typography } from '@material-ui/core'
 import React from 'react'
 
-function InforBox({ title, cases, total }) {
+function InforBox({ title, cases, total}) {
     return (
         <div className="inforBox">
             <Card>
