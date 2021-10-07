@@ -2,7 +2,6 @@ import React from 'react'
 import '../Styles/Table.css'
 
 function Table({countries}) {
-    console.log('Country >>> ',countries);
     return (
         <div className="table" >
             {

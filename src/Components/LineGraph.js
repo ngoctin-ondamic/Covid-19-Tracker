@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 
 function LineGraph() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   //https://disease.sh/v3/covid-19/historical/all?lastdays=120
   useEffect(async () => {
-    await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=120")
+    await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=10")
       .then((response) => response.json())
       .then((data) => {
         const chartData = buildChartData(data);
-        console.log("Chart Data >>> ", chartData);
         setData(chartData);
+        console.log("Data updated : ", chartData);
       });
   }, []);
 
@@ -25,6 +25,7 @@ function LineGraph() {
         };
         chartData.push(newDataPoint);
       }
+      console.log("Last data point : ", lastDataPoint);
       lastDataPoint = data[casesType][date];
     }
     return chartData;
@@ -38,7 +39,7 @@ function LineGraph() {
           labels: [...data],
           datasets: [
             {
-              label: "# Line graph",
+              label: "Changes in last 10 days",
               data: [...data],
               backgroundColor: ["rgba(255, 99, 132, 0.2)"],
               borderColor: ["rgba(255, 99, 132, 1)"],
@@ -50,10 +51,10 @@ function LineGraph() {
           maintainAspectRatio: false,
           // scales may like the animation
           scales: {
-            yAxes: [
+            yAxis: [
               {
                 ticks: {
-                  beginAtZero: true,
+                  beginAtZero: false,
                 },
               },
             ],
