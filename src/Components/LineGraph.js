@@ -3,6 +3,8 @@ import { Line } from "react-chartjs-2";
 
 function LineGraph() {
   const [data, setData] = useState([]);
+  const [dates, setDates] = useState([]);
+  const [xPoints,setXPoints] = useState([]);
   //https://disease.sh/v3/covid-19/historical/all?lastdays=120
   useEffect(async () => {
     await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=10")
@@ -10,8 +12,9 @@ function LineGraph() {
       .then((data) => {
         const chartData = buildChartData(data);
         setData(chartData);
-        console.log("Data updated : ", chartData);
-      });
+        const xPoints = chartData.map(item => item.x);
+        setXPoints(xPoints);
+      })
   }, []);
 
   const buildChartData = (data, casesType = "cases") => {
@@ -25,18 +28,26 @@ function LineGraph() {
         };
         chartData.push(newDataPoint);
       }
-      console.log("Last data point : ", lastDataPoint);
       lastDataPoint = data[casesType][date];
     }
+    console.log("Chart Data",chartData);
     return chartData;
   };
 
+  // const getDates = () => {
+  //   const list = [];
+  //   console.log("Data >>> ",data);
+  //   for (const item in data) {
+  //     console.log(item);
+  //   }
+  //   setDates(list);
+  // };
   return (
     <div>
       <Line
         type={"line"}
         data={{
-          labels: [...data],
+          labels: [...xPoints],
           datasets: [
             {
               label: "Changes in last 10 days",

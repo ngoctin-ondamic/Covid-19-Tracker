@@ -57,9 +57,6 @@ function App() {
         setCountryInfo(data);
       });
   };
-
-  console.log("Country Info >>>", countryInfo);
-
   return (
     <div className="app">
       <div className="app_left">
