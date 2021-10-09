@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
+import numeral from "numeral"
 
 function LineGraph() {
   const [data, setData] = useState([]);
@@ -62,7 +63,7 @@ function LineGraph() {
           maintainAspectRatio: false,
           // scales may like the animation
           scales: {
-            yAxis: [
+            yAxes: [
               {
                 ticks: {
                   beginAtZero: false,

@@ -18,7 +18,9 @@ function App() {
   const [country, setCountry] = useState("worldwide");
   const [countryInfo, setCountryInfo] = useState({});
   const [tableData, setTableData] = useState([]);
-
+  const [mapCenter, setMapCenter] = useState([21, 105.8]);
+  const [mapZoom, setMapZoom] = useState(4);
+  const [mapCountries,setMapCountries] = useState([]);
   const getCountriesData = async () => {
     await fetch("https://disease.sh/v3/covid-19/countries")
       .then((response) => response.json())
@@ -31,6 +33,7 @@ function App() {
         });
         const sortedData = sortData(data);
         setTableData(sortedData);
+        setMapCountries(data);
         setCountries(countries);
       });
   };
@@ -44,6 +47,17 @@ function App() {
     getCountriesData();
   }, []);
 
+  /**
+ *  useEffect(() => {
+    setCountryInfo(countryInfo);
+    const data = { ...countryInfo.countryInfo };
+    if (data != undefined) {
+      const location = [data.lat, data.long];
+    }
+  }, [countryInfo]);
+ * 
+ */
+
   const onCountryChange = async (event) => {
     const countryCode = event.target.value;
     setCountry(countryCode);
@@ -54,9 +68,19 @@ function App() {
     await fetch(url)
       .then((response) => response.json())
       .then((data) => {
+        setCountry(countryCode);
         setCountryInfo(data);
+        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        console.log(
+          `In function Country code ${country} - Infor : ${countryInfo.iso2} - Location : ${mapCenter}`
+        );
+        setMapZoom(12);
       });
   };
+  console.log(
+    `Out function Country code ${country} - Infor : ${countryInfo.iso2} - Location : ${mapCenter}`
+  );
+
   return (
     <div className="app">
       <div className="app_left">
@@ -78,7 +102,6 @@ function App() {
             </Select>
           </FormControl>
         </div>
-
         <div className="app_status">
           <InfoBox
             title="Corona Virus Cases"
@@ -96,11 +119,10 @@ function App() {
             total={countryInfo.deaths}
           />
         </div>
-
         {/** Table */}
         {/** Graph */}
         {/** Map */}
-        <Map />
+        <Map countries={mapCountries} casesType={"cases"} center={mapCenter} zoom={mapZoom} />
       </div>
       <Card className="app_right">
         <CardContent>
